@@ -15,41 +15,43 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                VStack {
-                    ForEach(viewModel.todoList, id: \.uuid) { item in
-                        ZStack(alignment: .trailing)
-                        {
-                            Image(systemName: "trash")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 32, height: 32)
-                                .foregroundColor(.red)
+                ScrollView {
+                    VStack {
+                        ForEach(viewModel.todoList, id: \.uuid) { item in
+                            ZStack(alignment: .trailing)
+                            {
+                                Image(systemName: "trash")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 32, height: 32)
+                                    .foregroundColor(.red)
+                                    .onTapGesture {
+                                        let realm = try! Realm()
+                                        if let todo = realm.object(ofType: Todo.self, forPrimaryKey: item.uuid) {
+                                            try! realm.write {
+                                                todo.isDelete = true
+                                            }
+                                        }
+                                    }
+                                
+                                CheckBoxButtonCards(
+                                    isChecked: false,
+                                    buttonText: item.todo
+                                )
                                 .onTapGesture {
                                     let realm = try! Realm()
                                     if let todo = realm.object(ofType: Todo.self, forPrimaryKey: item.uuid) {
                                         try! realm.write {
-                                            todo.isDelete = true
+                                            todo.completedAt = Date()
                                         }
-                                    }
-                                }
-                            
-                            CheckBoxButtonCards(
-                                isChecked: false,
-                                buttonText: item.todo
-                            )
-                            .onTapGesture {
-                                let realm = try! Realm()
-                                if let todo = realm.object(ofType: Todo.self, forPrimaryKey: item.uuid) {
-                                    try! realm.write {
-                                        todo.completedAt = Date()
                                     }
                                 }
                             }
                         }
+                        Spacer()
                     }
-                    Spacer()
+                    .padding()
                 }
-                .padding()
                 NavigationLink(destination: SecondView()) {
                     ZStack {
                         Circle()
