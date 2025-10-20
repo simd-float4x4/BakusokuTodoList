@@ -69,7 +69,6 @@ struct ContentView: View {
                 .padding()
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
             }
-            .navigationTitle("Todo")
         }
     }
 }
