@@ -13,12 +13,11 @@ struct TodoListView: View {
     
     var body: some View {
         NavigationStack {
-            ZStack {
+            ZStack(alignment: .bottomTrailing) {
                 ScrollView {
                     VStack {
                         ForEach(viewModel.todoList, id: \.uuid) { item in
-                            ZStack(alignment: .trailing)
-                            {
+                            ZStack(alignment: .trailing) {
                                 Image(systemName: "trash")
                                     .resizable()
                                     .scaledToFit()
@@ -32,7 +31,7 @@ struct TodoListView: View {
                                             }
                                         }
                                     }
-                                
+
                                 CheckBoxButtonCards(
                                     isChecked: false,
                                     buttonText: item.todo
@@ -51,7 +50,8 @@ struct TodoListView: View {
                     }
                     .padding()
                 }
-                NavigationLink(destination: SecondView()) {
+
+                NavigationLink(destination: CreateTodoView()) {
                     ZStack {
                         Circle()
                             .fill(Color.white)
@@ -66,7 +66,6 @@ struct TodoListView: View {
                     }
                 }
                 .padding()
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
             }
         }
     }
