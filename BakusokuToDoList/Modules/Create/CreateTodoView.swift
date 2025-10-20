@@ -1,14 +1,14 @@
 //
-//  ContentView.swift
+//  CreateTodoView.swift
 //  BakusokuToDoList
 //
-//  Created by Shumpei Horiuchi on 2025/10/19.
+//  Created by Shumpei Horiuchi on 2025/10/20.
 //
 
 import SwiftUI
 import RealmSwift
 
-struct SecondView: View {
+struct CreateTodoView: View {
     @State private var text: String = ""
     @FocusState var focus: Bool
     @Environment(\.dismiss) var dismiss
@@ -71,8 +71,4 @@ struct SecondView: View {
             focus = false
         }
     }
-}
-
-#Preview {
-    ContentView()
 }
