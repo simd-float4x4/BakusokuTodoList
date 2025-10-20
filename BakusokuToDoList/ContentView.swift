@@ -74,5 +74,5 @@ struct SecondView: View {
 }
 
 #Preview {
-    ContentView()
+    TodoListView()
 }
