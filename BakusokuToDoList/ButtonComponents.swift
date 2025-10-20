@@ -77,28 +77,28 @@ struct CheckBoxButtonCards: View {
         }
         .offset(x: dragOffset)
         .gesture(
-            DragGesture()
-            .onChanged { value in
-                if value.translation.width < 0 && dragOffset > -maxSwipe {
-                    dragOffset = value.translation.width
-                }
-                
-                if value.translation.width > 0 && dragOffset < 0 {
-                    dragOffset = 0
-                }
-            }
-            .onEnded { value in
-                if abs(value.translation.width) < 5 {
-                } else if dragOffset < swipeThreshold {
-                    withAnimation {
-                        dragOffset = -maxSwipe
+            DragGesture(minimumDistance: abs(swipeThreshold), coordinateSpace: .local)
+                .onChanged { value in
+                    if value.translation.width < 0 && dragOffset > -maxSwipe {
+                        dragOffset = value.translation.width
                     }
-                } else {
-                    withAnimation {
+                    
+                    if value.translation.width > 0 && dragOffset < 0 {
                         dragOffset = 0
                     }
                 }
-            }
+                .onEnded { value in
+                    if abs(value.translation.width) < 5 {
+                    } else if dragOffset < swipeThreshold {
+                        withAnimation {
+                            dragOffset = -maxSwipe
+                        }
+                    } else {
+                        withAnimation {
+                            dragOffset = 0
+                        }
+                    }
+                }
         )
     }
 }
