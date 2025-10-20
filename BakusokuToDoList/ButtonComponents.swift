@@ -17,6 +17,8 @@ struct ButtonComponents: View {
         }) {
             Text(buttonText)
                 .bold()
+                .frame(maxWidth: .infinity, maxHeight: 48)
+                .contentShape(Rectangle())
         }
         .frame(maxWidth: .infinity)
         .frame(maxHeight: 48)
