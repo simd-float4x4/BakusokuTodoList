@@ -24,8 +24,26 @@ enum SectionTitle: CaseIterable {
     }
 }
 
+struct TodoDeleteButton: View {
+    let onDelete: () -> Void
+
+    var body: some View {
+        Image(systemName: "trash")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 32, height: 32)
+            .foregroundColor(.red)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                onDelete()
+            }
+    }
+}
+
 struct TodoListView: View {
     @StateObject private var viewModel = TodoViewModel()
+    @State private var activeSectionTitle: SectionTitle = .ALL
+    let blue800 = Color.getRawColor(hex: "0031D8")
     
     var body: some View {
         NavigationStack {
@@ -35,15 +53,21 @@ struct TodoListView: View {
                         ZStack(alignment: .center) {
                             VStack(spacing: 0) {
                                 Rectangle()
-                                    .fill(.ultraThinMaterial)
+                                    .fill(activeSectionTitle == title ? AnyShapeStyle(.mint.opacity(0.3)) : AnyShapeStyle(.ultraThinMaterial))
                                     .frame(height: 43)
                                 Rectangle()
+                                    .fill(activeSectionTitle == title ? .mint : .gray)
                                     .frame(height: 5)
                             }
                             .frame(minWidth: 78)
                             .border(.black.opacity(0.2), width: 1)
+                            
                             Text(title.titleText)
                                 .padding()
+                        }
+                        .onTapGesture {
+                            activeSectionTitle = title
+                            viewModel.mode = title
                         }
                     }
                 }
@@ -54,19 +78,14 @@ struct TodoListView: View {
                     VStack {
                         ForEach(viewModel.todoList, id: \.uuid) { item in
                             ZStack(alignment: .trailing) {
-                                Image(systemName: "trash")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 32, height: 32)
-                                    .foregroundColor(.red)
-                                    .onTapGesture {
-                                        let realm = try! Realm()
-                                        if let todo = realm.object(ofType: Todo.self, forPrimaryKey: item.uuid) {
-                                            try! realm.write {
-                                                todo.isDelete = true
-                                            }
+                                TodoDeleteButton(onDelete: {
+                                    let realm = try! Realm()
+                                    if let todo = realm.object(ofType: Todo.self, forPrimaryKey: item.uuid) {
+                                        try! realm.write {
+                                            todo.isDelete = true
                                         }
                                     }
+                                })
 
                                 CheckBoxButtonCards(
                                     isChecked: item.isComplete,
@@ -100,7 +119,7 @@ struct TodoListView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 32, height: 32)
-                            .foregroundColor(.blue)
+                            .foregroundColor(blue800)
                     }
                 }
                 .padding()

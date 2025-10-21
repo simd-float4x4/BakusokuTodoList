@@ -15,16 +15,31 @@ class TodoViewModel: ObservableObject {
     private var realm: Realm
 
     @Published var todoList: [Todo] = []
+    @Published var mode: SectionTitle = .ALL {
+        didSet {
+            fetchTodos(current: mode)
+        }
+    }
 
     init() {
         realm = try! Realm()
-        fetchTodos()
+        fetchTodos(current: mode)
     }
 
-    private func fetchTodos() {
-        let results = realm.objects(Todo.self).where { $0.isDelete == false }
-        todoList = Array(results)
-
+    private func fetchTodos(current: SectionTitle) {
+        var results = realm.objects(Todo.self)
+        
+        switch current {
+        case .ALL:
+            results = results.filter("isDelete == false")
+        case .CHECKED:
+            results = results.filter("isComplete == true")
+        case .CURRENTLY_DETLETED:
+            results = results.filter("isDelete == true")
+        case .NORMAL:
+            results = results.filter("isComplete == false")
+        }
+    
         notificationToken = results.observe { [weak self] changes in
             guard let self = self else { return }
             switch changes {
