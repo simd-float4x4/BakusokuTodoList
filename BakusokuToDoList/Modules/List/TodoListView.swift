@@ -108,6 +108,7 @@ struct TodoListView: View {
                     .padding()
                     
                     Spacer()
+                        .frame(maxWidth: .infinity)
                         .frame(height: 60)
                         .padding()
                 }

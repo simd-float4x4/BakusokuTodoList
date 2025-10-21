@@ -33,11 +33,11 @@ class TodoViewModel: ObservableObject {
         case .ALL:
             results = results.filter("isDelete == false")
         case .CHECKED:
-            results = results.filter("isComplete == true")
+            results = results.filter("isComplete == true && isDelete == false")
         case .CURRENTLY_DETLETED:
-            results = results.filter("isDelete == true")
+            results = results.filter("isDelete == true && isDelete == false")
         case .NORMAL:
-            results = results.filter("isComplete == false")
+            results = results.filter("isComplete == false && isDelete == false")
         }
     
         notificationToken = results.observe { [weak self] changes in
