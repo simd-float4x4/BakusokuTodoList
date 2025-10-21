@@ -106,6 +106,10 @@ struct TodoListView: View {
                         Spacer()
                     }
                     .padding()
+                    
+                    Spacer()
+                        .frame(height: 60)
+                        .padding()
                 }
 
                 NavigationLink(destination: CreateTodoView()) {
