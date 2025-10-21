@@ -5,6 +5,7 @@
 //  Created by Shumpei Horiuchi on 2025/10/20.
 //
 
+import UIKit
 import SwiftUI
 import RealmSwift
 
@@ -98,6 +99,8 @@ struct TodoListView: View {
     @State private var activeSectionTitle: SectionTitle = .ALL
     @State private var isShowAlert = false
     @State private var isDeleteBegun = false
+    @State private var showAlert = false
+    @State private var editedText = ""
     let blue800 = Color.getRawColor(hex: "0031D8")
         
     var body: some View {
@@ -178,7 +181,31 @@ struct TodoListView: View {
                                             }
                                         }
                                     }, isFavorite: item.isFavorite)
-                                    TodoEditButton(onEdit: {})
+                                    TodoEditButton(onEdit: {
+                                        editedText = item.todo
+                                        showAlert = true
+                                    })
+                                    .sheet(isPresented: $showAlert) {
+                                        VStack(spacing: 20) {
+                                            Text("タスクを更新する")
+                                            TextField("", text: $editedText)
+                                                .textFieldStyle(.roundedBorder)
+                                                .padding()
+                                            HStack {
+                                                Button("キャンセル") { showAlert = false }
+                                                Button("更新") {
+                                                    let realm = try! Realm()
+                                                    if let todo = realm.object(ofType: Todo.self, forPrimaryKey: item.uuid) {
+                                                        try! realm.write {
+                                                            todo.todo = editedText
+                                                        }
+                                                    }
+                                                    showAlert = false
+                                                }
+                                            }
+                                        }
+                                        .padding()
+                                    }
                                     Spacer()
                                     if activeSectionTitle == .CURRENTLY_DETLETED {
                                         TodoRestoreButton(onRestore: {
