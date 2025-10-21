@@ -114,7 +114,7 @@ struct TodoListView: View {
                         isShowAlert = true
                     }
                 )
-                .alert("選択したタスクを本当に削除しますか？", isPresented: $isShowAlert) {
+                .alert("最近削除したタスクを本当に削除しますか？", isPresented: $isShowAlert) {
                     Button("キャンセル", role: .cancel) {
                         isShowAlert = false
                     }
