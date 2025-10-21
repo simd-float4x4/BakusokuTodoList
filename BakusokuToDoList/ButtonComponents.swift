@@ -118,7 +118,7 @@ struct CheckBoxButtonCards: View {
                     }
                     
                     // 移動量が左にあると同時に100でdragをストップ
-                    if value.translation.width > 0 && dragOffset < maxSwipe {
+                    if value.translation.width > 0 && dragOffset < maxSwipe*2 {
                         dragOffset = value.translation.width
                     }
                     // ちょっとスワイプで戻す
@@ -134,7 +134,7 @@ struct CheckBoxButtonCards: View {
                         }
                     } else if dragOffset > swipeThreshold {
                         withAnimation {
-                            dragOffset = maxSwipe
+                            dragOffset = maxSwipe*2
                         }
                     } else {
                         withAnimation {

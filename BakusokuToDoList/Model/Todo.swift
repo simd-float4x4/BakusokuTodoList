@@ -15,6 +15,7 @@ class Todo: Object {
     @Persisted var isComplete: Bool
     @Persisted var completedAt: Date?
     @Persisted var isDelete: Bool
+    @Persisted var isFavorite: Bool
 
     convenience init(todo: String) {
         self.init()
@@ -23,5 +24,6 @@ class Todo: Object {
         self.isComplete = false
         self.createdAt = Date()
         self.isDelete = false
+        self.isFavorite = false
     }
 }
