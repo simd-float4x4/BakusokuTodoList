@@ -8,11 +8,47 @@
 import SwiftUI
 import RealmSwift
 
+enum SectionTitle: CaseIterable {
+    case ALL
+    case NORMAL
+    case CHECKED
+    case CURRENTLY_DETLETED
+    
+    var titleText: String {
+        switch self {
+        case .ALL: return "すべて"
+        case .NORMAL: return "未達成"
+        case .CHECKED: return "チェック済"
+        case .CURRENTLY_DETLETED: return "最近削除した項目"
+        }
+    }
+}
+
 struct TodoListView: View {
     @StateObject private var viewModel = TodoViewModel()
     
     var body: some View {
         NavigationStack {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 0) {
+                    ForEach(SectionTitle.allCases, id: \.self) { title in
+                        ZStack(alignment: .center) {
+                            VStack(spacing: 0) {
+                                Rectangle()
+                                    .fill(.ultraThinMaterial)
+                                    .frame(height: 43)
+                                Rectangle()
+                                    .frame(height: 5)
+                            }
+                            .frame(minWidth: 78)
+                            .border(.black.opacity(0.2), width: 1)
+                            Text(title.titleText)
+                                .padding()
+                        }
+                    }
+                }
+            }
+            
             ZStack(alignment: .bottomTrailing) {
                 ScrollView {
                     VStack {
@@ -41,7 +77,6 @@ struct TodoListView: View {
                                             try! realm.write {
                                                 let current = todo.isComplete
                                                 todo.isComplete = !current
-                                                print("tapされた: ", todo.isComplete)
                                                 todo.completedAt = Date()
                                             }
                                         }
