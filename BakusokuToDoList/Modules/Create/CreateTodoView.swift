@@ -15,7 +15,6 @@ struct CreateTodoView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            
             ZStack {
                 TextEditor(text: $text)
                     .focused($focus)
@@ -45,7 +44,7 @@ struct CreateTodoView: View {
                 }
                 .opacity(text.isEmpty ? 0.5 : 0.0)
                 .allowsHitTesting(false)
-                .padding(4)
+                .padding(10)
             }
            
             
