@@ -33,17 +33,20 @@ struct TodoListView: View {
                                     }
 
                                 CheckBoxButtonCards(
-                                    isChecked: false,
-                                    buttonText: item.todo
-                                )
-                                .onTapGesture {
-                                    let realm = try! Realm()
-                                    if let todo = realm.object(ofType: Todo.self, forPrimaryKey: item.uuid) {
-                                        try! realm.write {
-                                            todo.completedAt = Date()
+                                    isChecked: item.isComplete,
+                                    buttonText: item.todo,
+                                    onVoid: {
+                                        let realm = try! Realm()
+                                        if let todo = realm.object(ofType: Todo.self, forPrimaryKey: item.uuid) {
+                                            try! realm.write {
+                                                let current = todo.isComplete
+                                                todo.isComplete = !current
+                                                print("tapされた: ", todo.isComplete)
+                                                todo.completedAt = Date()
+                                            }
                                         }
                                     }
-                                }
+                                )
                             }
                         }
                         Spacer()

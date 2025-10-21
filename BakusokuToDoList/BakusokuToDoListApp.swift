@@ -32,7 +32,6 @@ struct BakusokuToDoListApp: SwiftUI.App {
                 }
             }
         )
-        
         Realm.Configuration.defaultConfiguration = config
     }
 }

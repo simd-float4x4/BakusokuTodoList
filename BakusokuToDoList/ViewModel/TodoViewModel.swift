@@ -32,7 +32,6 @@ class TodoViewModel: ObservableObject {
                 self.todoList = Array(results)
             case .update(let results, _, _, _):
                 self.todoList = Array(results)
-                self.todoList = self.todoList.sorted(by: {$0.isComplete == false && $1.isComplete == true})
             case .error(let error):
                 print("Error observing todos: \(error)")
             }

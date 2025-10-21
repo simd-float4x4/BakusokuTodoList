@@ -36,6 +36,8 @@ struct CheckBoxButtonCards: View {
     @State private var dragOffset: CGFloat = 0
     private let maxSwipe: CGFloat = 50
     private let swipeThreshold: CGFloat = -25
+    
+    var onVoid: () -> Void
 
     let blue50 = Color.getRawColor(hex: "E8F1FE")
     let blue200 = Color.getRawColor(hex: "C5D7FB")
@@ -43,6 +45,7 @@ struct CheckBoxButtonCards: View {
     let blue800 = Color.getRawColor(hex: "0031D8")
     let blue100 = Color.getRawColor(hex: "D9E6FF")
     let gray800 = Color.getRawColor(hex: "333333")
+    
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
             Image(systemName: isChecked ? "checkmark.square.fill" : "square")
@@ -72,6 +75,7 @@ struct CheckBoxButtonCards: View {
         .onTapGesture {
             if dragOffset == 0 {
                 isChecked.toggle()
+                onVoid()
             }
             dragOffset = 0
         }
