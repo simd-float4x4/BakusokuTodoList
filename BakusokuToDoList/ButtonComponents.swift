@@ -108,11 +108,21 @@ struct CheckBoxButtonCards: View {
         .gesture(
             DragGesture(minimumDistance: abs(swipeThreshold), coordinateSpace: .local)
                 .onChanged { value in
+                    // 移動量が左にあると同時に-100でdragをストップ
                     if value.translation.width < 0 && dragOffset > -maxSwipe {
                         dragOffset = value.translation.width
                     }
-                    
+                    // ちょっとスワイプで戻す
                     if value.translation.width > 0 && dragOffset < 0 {
+                        dragOffset = 0
+                    }
+                    
+                    // 移動量が左にあると同時に100でdragをストップ
+                    if value.translation.width > 0 && dragOffset < maxSwipe {
+                        dragOffset = value.translation.width
+                    }
+                    // ちょっとスワイプで戻す
+                    if value.translation.width < 0 && dragOffset > 0 {
                         dragOffset = 0
                     }
                 }
@@ -121,6 +131,10 @@ struct CheckBoxButtonCards: View {
                     } else if dragOffset < swipeThreshold {
                         withAnimation {
                             dragOffset = -maxSwipe
+                        }
+                    } else if dragOffset > swipeThreshold {
+                        withAnimation {
+                            dragOffset = maxSwipe
                         }
                     } else {
                         withAnimation {
