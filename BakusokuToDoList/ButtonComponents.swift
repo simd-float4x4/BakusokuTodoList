@@ -7,6 +7,31 @@
 
 import SwiftUI
 
+struct DeleteAllButtonComponents: View {
+    @State var buttonText: String
+    @State var isEnabled: Bool
+    
+    var onVoid: () -> Void
+    
+    var body: some View {
+        Button(action: {
+            onVoid()
+        }) {
+            Text(buttonText)
+                .bold()
+                .frame(maxWidth: .infinity, maxHeight: 48)
+                .contentShape(Rectangle())
+        }
+        .disabled(!isEnabled)
+        .frame(maxWidth: .infinity)
+        .frame(maxHeight: 48)
+        .accentColor(.white)
+        .background(isEnabled == true ? .red : .gray )
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+    }
+}
+
+
 struct ButtonComponents: View {
     @State var buttonText: String
     var onVoid: () -> Void

@@ -60,9 +60,23 @@ struct TodoRestoreButton: View {
 struct TodoListView: View {
     @StateObject private var viewModel = TodoViewModel()
     @State private var activeSectionTitle: SectionTitle = .ALL
+    @State private var isShowAlert = false
+    @State private var isDeleteBegun = false
     let blue800 = Color.getRawColor(hex: "0031D8")
-    
+        
     var body: some View {
+        ZStack {
+            contentView
+            if isDeleteBegun {
+                Color.black.opacity(0.5)
+                    .ignoresSafeArea()
+                ProgressView()
+            }
+        }
+    }
+    
+    
+    var contentView: some View {
         NavigationStack {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 0) {
@@ -89,7 +103,31 @@ struct TodoListView: View {
                     }
                 }
             }
-
+            
+            if activeSectionTitle == .CURRENTLY_DETLETED {
+                DeleteAllButtonComponents(
+                    buttonText: "全て削除する",
+                    isEnabled: viewModel.enabledPressDeleteButton(),
+                    onVoid: {
+                        isShowAlert = true
+                    }
+                )
+                .alert("選択したタスクを本当に削除しますか？", isPresented: $isShowAlert) {
+                    Button("キャンセル", role: .cancel) {
+                        isShowAlert = false
+                    }
+                    Button("完全に削除する", role: .destructive) {
+                        isShowAlert = false
+                        isDeleteBegun = true
+                        viewModel.deleteAllTodo()
+                        isDeleteBegun = false
+                    }
+                } message: {
+                    Text("この操作は元に戻せません。")
+                }
+                .padding()
+            }
+            
             ZStack(alignment: .bottomTrailing) {
                 ScrollView {
                     VStack {

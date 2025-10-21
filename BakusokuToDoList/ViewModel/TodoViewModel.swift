@@ -52,6 +52,28 @@ class TodoViewModel: ObservableObject {
             }
         }
     }
+    
+    func enabledPressDeleteButton() -> Bool {
+        var b = true
+        let result = realm.objects(Todo.self).where({ $0.isDelete == true })
+        if result.isEmpty { b = !b }
+        return b
+    }
+    
+    func deleteAllTodo() {
+        Task {
+            do {
+                let realmInstance = try Realm()
+                let todosToDelete = realmInstance.objects(Todo.self).where { $0.isDelete == true }
+                try realmInstance.write {
+                    realmInstance.delete(todosToDelete)
+                }
+            } catch {
+                print("❌ Error during permanent deletion of todos: \(error)")
+            }
+        }
+        fetchTodos(current: .CURRENTLY_DETLETED)
+    }
 
     deinit {
         notificationToken?.invalidate()
