@@ -40,6 +40,23 @@ struct TodoDeleteButton: View {
     }
 }
 
+struct TodoRestoreButton: View {
+    let onDelete: () -> Void
+    let blue800 = Color.getRawColor(hex: "0031D8")
+
+    var body: some View {
+        Image(systemName: "arrow.triangle.2.circlepath")
+            .resizable()
+            .scaledToFit()
+            .frame(width: 32, height: 32)
+            .foregroundColor(blue800)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                onDelete()
+            }
+    }
+}
+
 struct TodoListView: View {
     @StateObject private var viewModel = TodoViewModel()
     @State private var activeSectionTitle: SectionTitle = .ALL
@@ -72,20 +89,31 @@ struct TodoListView: View {
                     }
                 }
             }
-            
+
             ZStack(alignment: .bottomTrailing) {
                 ScrollView {
                     VStack {
                         ForEach(viewModel.todoList, id: \.uuid) { item in
                             ZStack(alignment: .trailing) {
-                                TodoDeleteButton(onDelete: {
-                                    let realm = try! Realm()
-                                    if let todo = realm.object(ofType: Todo.self, forPrimaryKey: item.uuid) {
-                                        try! realm.write {
-                                            todo.isDelete = true
+                                if activeSectionTitle == .CURRENTLY_DETLETED {
+                                    TodoRestoreButton(onDelete: {
+                                        let realm = try! Realm()
+                                        if let todo = realm.object(ofType: Todo.self, forPrimaryKey: item.uuid) {
+                                            try! realm.write {
+                                                todo.isDelete = false
+                                            }
                                         }
-                                    }
-                                })
+                                    })
+                                } else {
+                                    TodoDeleteButton(onDelete: {
+                                        let realm = try! Realm()
+                                        if let todo = realm.object(ofType: Todo.self, forPrimaryKey: item.uuid) {
+                                            try! realm.write {
+                                                todo.isDelete = true
+                                            }
+                                        }
+                                    })
+                                }
 
                                 CheckBoxButtonCards(
                                     isChecked: item.isComplete,
