@@ -10,13 +10,13 @@ import SwiftUI
 import RealmSwift
 
 struct TodoListView: View {
-    @StateObject private var viewModel = TodoViewModel()
-    @State private var activeSectionTitle: SectionTitle = .ALL
-    @State private var selectedUUID: String = ""
-    @State private var isShowAlert = false
-    @State private var isDeleteBegun = false
-    @State private var showAlert = false
-    @State private var editedText = ""
+    @StateObject var viewModel = TodoViewModel()
+    @State var activeSectionTitle: SectionTitle = .ALL
+    @State var selectedUUID: String = ""
+    @State var isShowAlert = false
+    @State var isDeleteBegun = false
+    @State var showAlert = false
+    @State var editedText = ""
     let blue800 = Color.getRawColor(hex: "0031D8")
         
     var body: some View {
@@ -35,32 +35,7 @@ struct TodoListView: View {
     var contentView: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 0) {
-                        ForEach(SectionTitle.allCases, id: \.self) { title in
-                            ZStack(alignment: .center) {
-                                VStack(spacing: 0) {
-                                    Rectangle()
-                                        .fill(activeSectionTitle == title ? AnyShapeStyle(.mint.opacity(0.3)) : AnyShapeStyle(.ultraThinMaterial))
-                                        .frame(height: 43)
-                                    Rectangle()
-                                        .fill(activeSectionTitle == title ? .mint : .gray)
-                                        .frame(height: 5)
-                                }
-                                .frame(minWidth: 78)
-                                .border(.black.opacity(0.2), width: 1)
-                                
-                                Text(title.titleText)
-                                    .padding()
-                            }
-                            .onTapGesture {
-                                activeSectionTitle = title
-                                viewModel.mode = title
-                            }
-                        }
-                    }
-                }
-                
+                navigationHeader()
                 if activeSectionTitle == .CURRENTLY_DETLETED {
                     DeleteAllButtonComponents(
                         buttonText: "全て削除する",
@@ -179,9 +154,7 @@ struct TodoListView: View {
                                 .shadow(radius: 4)
 
                             Image(systemName: "plus")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 32, height: 32)
+                                .font(.title3)
                                 .foregroundColor(blue800)
                         }
                     }
