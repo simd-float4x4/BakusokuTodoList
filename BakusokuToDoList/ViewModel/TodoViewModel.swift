@@ -33,13 +33,13 @@ class TodoViewModel: ObservableObject {
         case .ALL:
             results = results.where({ $0.isDelete == false })
         case .CHECKED:
-            results = results.where({ $0.isDelete == false && $0.isComplete == true})
+            results = results.where({ $0.isDelete == false && $0.isComplete == true })
         case .CURRENTLY_DETLETED:
-            results = results.where({ $0.isDelete == true})
+            results = results.where({ $0.isDelete == true })
         case .NORMAL:
-            results = results.where({ $0.isDelete == false && $0.isComplete == false})
+            results = results.where({ $0.isDelete == false && $0.isComplete == false && $0.isFavorite == false })
         case .STAR:
-            results = results.where({ $0.isDelete == false && $0.isFavorite == true})
+            results = results.where({ $0.isDelete == false && $0.isFavorite == true })
         }
     
         notificationToken = results.observe { [weak self] changes in
