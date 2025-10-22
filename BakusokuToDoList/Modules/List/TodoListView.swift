@@ -154,9 +154,9 @@ struct TodoListView: View {
                             isShowAlert = false
                             isDeleteBegun = true
                             Task {
-                                // viewModel.deleteAllTodo()
+                                viewModel.deleteAllTodo()
                             }
-                            // isDeleteBegun = false
+                            isDeleteBegun = false
                         }
                     } message: {
                         Text("この操作は元に戻せません。")

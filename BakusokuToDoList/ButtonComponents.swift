@@ -22,11 +22,11 @@ struct DeleteAllButtonComponents: View {
                 .frame(maxWidth: .infinity, maxHeight: 48)
                 .contentShape(Rectangle())
         }
-        .disabled(!isEnabled)
+        .disabled(isEnabled)
         .frame(maxWidth: .infinity)
         .frame(maxHeight: 48)
         .accentColor(.white)
-        .background(isEnabled == true ? .red : .gray )
+        .background(isEnabled == true ? .gray : .red )
         .clipShape(RoundedRectangle(cornerRadius: 8))
     }
 }
