@@ -98,6 +98,13 @@ struct TodoListView: View {
     var body: some View {
         ZStack {
             contentView
+            if isDeleteBegun {
+                Color.black.opacity(0.8)
+                    .ignoresSafeArea()
+                ProgressView()
+                    .tint(.white)
+                    .scaleEffect(3)
+            }
         }
     }
     
@@ -146,8 +153,10 @@ struct TodoListView: View {
                         Button("完全に削除する", role: .destructive) {
                             isShowAlert = false
                             isDeleteBegun = true
-                            viewModel.deleteAllTodo()
-                            isDeleteBegun = false
+                            Task {
+                                // viewModel.deleteAllTodo()
+                            }
+                            // isDeleteBegun = false
                         }
                     } message: {
                         Text("この操作は元に戻せません。")
