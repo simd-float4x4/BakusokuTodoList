@@ -43,13 +43,13 @@ struct TodoDeleteButton: View {
 
 struct TodoFavoriteButton: View {
     let onStar: () -> Void
-    let starYellow = Color.getRawColor(hex: "FFDC00")
+    let blue800 = Color.getRawColor(hex: "0031D8")
     let isFavorite: Bool
 
     var body: some View {
         Image(systemName: isFavorite ? "star.fill" : "star")
             .font(.title3)
-            .foregroundColor(starYellow)
+            .foregroundColor(blue800)
             .contentShape(Rectangle())
             .onTapGesture {
                 onStar()
@@ -161,7 +161,7 @@ struct TodoListView: View {
             
             ZStack(alignment: .bottomTrailing) {
                 ScrollView {
-                    LazyVStack {
+                    LazyVStack(spacing: 8) {
                         ForEach(viewModel.todoList, id: \.uuid) { item in
                             ZStack(alignment: .trailing) {
                                 HStack(spacing: 8) {
@@ -237,7 +237,6 @@ struct TodoListView: View {
                                 )
                             }
                         }
-                        Spacer()
                     }
                     .padding()
                     
