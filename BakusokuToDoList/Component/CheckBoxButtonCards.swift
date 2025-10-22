@@ -7,52 +7,6 @@
 
 import SwiftUI
 
-struct DeleteAllButtonComponents: View {
-    @State var buttonText: String
-    @State var isEnabled: Bool
-    
-    var onVoid: () -> Void
-    
-    var body: some View {
-        Button(action: {
-            onVoid()
-        }) {
-            Text(buttonText)
-                .bold()
-                .frame(maxWidth: .infinity, maxHeight: 48)
-                .contentShape(Rectangle())
-        }
-        .disabled(isEnabled)
-        .frame(maxWidth: .infinity)
-        .frame(maxHeight: 48)
-        .accentColor(.white)
-        .background(isEnabled == true ? .gray : .red )
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-    }
-}
-
-
-struct ButtonComponents: View {
-    @State var buttonText: String
-    var onVoid: () -> Void
-    
-    var body: some View {
-        Button(action: {
-            onVoid()
-        }) {
-            Text(buttonText)
-                .bold()
-                .frame(maxWidth: .infinity, maxHeight: 48)
-                .contentShape(Rectangle())
-        }
-        .frame(maxWidth: .infinity)
-        .frame(maxHeight: 48)
-        .accentColor(.white)
-        .background(Color.getRawColor(hex: "0017C1"))
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-    }
-}
-
 struct CheckBoxButtonCards: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @State var isChecked: Bool = false
@@ -152,25 +106,6 @@ struct CheckBoxButtonCards: View {
                         }
                     }
                 }
-        )
-    }
-}
-
-extension Color {
-    static func getRawColor(hex: String) -> Color {
-        var red = 0
-        var green = 0
-        var blue = 0
-        if let hexNumber = Int(hex, radix: 16) {
-            red = (hexNumber >> 16) & 0xFF
-            green = (hexNumber >> 8) & 0xFF
-            blue = hexNumber & 0xFF
-        }
-        return Color(
-            red: Double(red) / 255.0,
-            green: Double(green) / 255.0,
-            blue: Double(blue) / 255.0,
-            opacity: 1.0
         )
     }
 }

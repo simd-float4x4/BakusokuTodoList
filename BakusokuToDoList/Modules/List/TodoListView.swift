@@ -9,86 +9,10 @@ import UIKit
 import SwiftUI
 import RealmSwift
 
-enum SectionTitle: CaseIterable {
-    case STAR
-    case ALL
-    case NORMAL
-    case CHECKED
-    case CURRENTLY_DETLETED
-    
-    var titleText: String {
-        switch self {
-        case .STAR: return "★"
-        case .ALL: return "すべて"
-        case .NORMAL: return "未達成"
-        case .CHECKED: return "チェック済"
-        case .CURRENTLY_DETLETED: return "最近削除した項目"
-        }
-    }
-}
-
-struct TodoDeleteButton: View {
-    let onDelete: () -> Void
-
-    var body: some View {
-        Image(systemName: "trash")
-            .font(.title3)
-            .foregroundColor(.red)
-            .contentShape(Rectangle())
-            .onTapGesture {
-                onDelete()
-            }
-    }
-}
-
-struct TodoFavoriteButton: View {
-    let onStar: () -> Void
-    let blue800 = Color.getRawColor(hex: "0031D8")
-    let isFavorite: Bool
-
-    var body: some View {
-        Image(systemName: isFavorite ? "star.fill" : "star")
-            .font(.title3)
-            .foregroundColor(blue800)
-            .contentShape(Rectangle())
-            .onTapGesture {
-                onStar()
-            }
-    }
-}
-
-struct TodoEditButton: View {
-    let onEdit: () -> Void
-    let blue800 = Color.getRawColor(hex: "0031D8")
-    var body: some View {
-        Image(systemName: "pencil")
-            .font(.title3)
-            .foregroundColor(blue800)
-            .contentShape(Rectangle())
-            .onTapGesture {
-                onEdit()
-            }
-    }
-}
-
-struct TodoRestoreButton: View {
-    let onRestore: () -> Void
-    let blue800 = Color.getRawColor(hex: "0031D8")
-
-    var body: some View {
-        Image(systemName: "arrow.triangle.2.circlepath")
-            .font(.title3)
-            .foregroundColor(blue800)
-            .contentShape(Rectangle())
-            .onTapGesture {
-                onRestore()
-            }
-    }
-}
-
 struct TodoListView: View {
     @StateObject private var viewModel = TodoViewModel()
     @State private var activeSectionTitle: SectionTitle = .ALL
+    @State private var selectedUUID: String = ""
     @State private var isShowAlert = false
     @State private var isDeleteBegun = false
     @State private var showAlert = false
@@ -107,7 +31,6 @@ struct TodoListView: View {
             }
         }
     }
-    
     
     var contentView: some View {
         NavigationStack {
@@ -157,6 +80,7 @@ struct TodoListView: View {
                                 viewModel.deleteAllTodo()
                             }
                             isDeleteBegun = false
+                            viewModel.reloadData()
                         }
                     } message: {
                         Text("この操作は元に戻せません。")
@@ -173,6 +97,7 @@ struct TodoListView: View {
                                         TodoEditButton(onEdit: {
                                             editedText = item.todo
                                             showAlert = true
+                                            selectedUUID = item.uuid
                                         })
                                         Spacer()
                                         if activeSectionTitle == .CURRENTLY_DETLETED {
@@ -220,6 +145,22 @@ struct TodoListView: View {
                                         }
                                     )
                                 }
+                            }
+                            .alert("", isPresented: $showAlert) {
+                                TextField("更新されたToDoを入力", text: $editedText)
+                                Button("更新") {
+                                    Task {
+                                        viewModel.updateTodoContent(uuid: selectedUUID, updatedText: editedText)
+                                        viewModel.reloadData()
+                                    }
+                                    showAlert = false
+                                    viewModel.fetchTodos(current: activeSectionTitle)
+                                }
+                                Button("キャンセル", role: .cancel) {
+                                    showAlert = false
+                                }
+                            } message: {
+                                Text("タスクを更新してください。")
                             }
                         }
                         .padding()

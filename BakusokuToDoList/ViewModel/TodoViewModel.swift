@@ -13,20 +13,25 @@ import Realm
 class TodoViewModel: ObservableObject {
     private var notificationToken: NotificationToken?
     private var realm: Realm
-
+    
     @Published var todoList: [Todo] = []
     @Published var mode: SectionTitle = .ALL {
         didSet {
             fetchTodos(current: mode)
         }
     }
-
+    
     init() {
         realm = try! Realm()
         fetchTodos(current: mode)
     }
-
-    private func fetchTodos(current: SectionTitle) {
+    
+    func reloadData() {
+        todoList = Array(realm.objects(Todo.self))
+    }
+    
+    
+    func fetchTodos(current: SectionTitle) {
         var results = realm.objects(Todo.self)
         
         switch current {
@@ -41,7 +46,7 @@ class TodoViewModel: ObservableObject {
         case .STAR:
             results = results.where({ $0.isDelete == false && $0.isFavorite == true })
         }
-    
+        
         notificationToken = results.observe { [weak self] changes in
             guard let self = self else { return }
             switch changes {
@@ -51,6 +56,15 @@ class TodoViewModel: ObservableObject {
                 self.todoList = Array(results)
             case .error(let error):
                 print("Error observing todos: \(error)")
+            }
+        }
+    }
+    
+    func updateTodoContent(uuid: String, updatedText: String) {
+        if let todo = realm.object(ofType: Todo.self, forPrimaryKey: uuid) {
+            try! realm.write {
+                todo.todo = updatedText
+                print(todo.todo, "にupdateされました")
             }
         }
     }
