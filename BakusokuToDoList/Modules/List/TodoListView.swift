@@ -32,9 +32,7 @@ struct TodoDeleteButton: View {
 
     var body: some View {
         Image(systemName: "trash")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 32, height: 32)
+            .font(.title3)
             .foregroundColor(.red)
             .contentShape(Rectangle())
             .onTapGesture {
