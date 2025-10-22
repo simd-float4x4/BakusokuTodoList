@@ -11,7 +11,7 @@ struct CheckBoxButtonCards: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @State var isChecked: Bool = false
     var isFavorite: Bool = false
-    @State var buttonText: String
+    let buttonText: String
     
     @State private var dragOffset: CGFloat = 0
     private let maxSwipe: CGFloat = 50
