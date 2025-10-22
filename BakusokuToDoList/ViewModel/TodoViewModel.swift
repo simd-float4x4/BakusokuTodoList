@@ -33,7 +33,7 @@ class TodoViewModel: ObservableObject {
         case .ALL:
             results = results.where({ $0.isDelete == false })
         case .CHECKED:
-            results = results.where({ $0.isDelete == false && $0.isComplete == true })
+            results = results.where({ $0.isDelete == false && $0.isComplete == true }).sorted(byKeyPath: "completedAt", ascending: false)
         case .CURRENTLY_DETLETED:
             results = results.where({ $0.isDelete == true })
         case .NORMAL:
