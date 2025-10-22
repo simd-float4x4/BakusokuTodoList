@@ -56,6 +56,7 @@ struct ButtonComponents: View {
 struct CheckBoxButtonCards: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @State var isChecked: Bool = false
+    @State var isFavorite: Bool = false
     @State var buttonText: String
     
     @State private var dragOffset: CGFloat = 0
@@ -63,6 +64,7 @@ struct CheckBoxButtonCards: View {
     private let swipeThreshold: CGFloat = -25
     
     var onVoid: () -> Void
+    var onFavoriteVoid: () -> Void
 
     let blue50 = Color.getRawColor(hex: "E8F1FE")
     let blue200 = Color.getRawColor(hex: "C5D7FB")
@@ -84,6 +86,11 @@ struct CheckBoxButtonCards: View {
                 .foregroundColor(.primary)
                 .bold()
                 .fixedSize(horizontal: false, vertical: true)
+            
+            Spacer()
+            
+            TodoFavoriteButton(onStar: onFavoriteVoid, isFavorite: isFavorite)
+            
         }
         .padding()
         .frame(maxWidth: .infinity, minHeight: 48, alignment: .leading)
@@ -118,7 +125,7 @@ struct CheckBoxButtonCards: View {
                     }
                     
                     // 移動量が左にあると同時に100でdragをストップ
-                    if value.translation.width > 0 && dragOffset < maxSwipe*2 {
+                    if value.translation.width > 0 && dragOffset < maxSwipe {
                         dragOffset = value.translation.width
                     }
                     // ちょっとスワイプで戻す
@@ -134,7 +141,7 @@ struct CheckBoxButtonCards: View {
                         }
                     } else if dragOffset > swipeThreshold {
                         withAnimation {
-                            dragOffset = maxSwipe*2
+                            dragOffset = maxSwipe
                         }
                     } else {
                         withAnimation {

@@ -50,9 +50,7 @@ struct TodoFavoriteButton: View {
 
     var body: some View {
         Image(systemName: isFavorite ? "star.fill" : "star")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 32, height: 32)
+            .font(.title3)
             .foregroundColor(starYellow)
             .contentShape(Rectangle())
             .onTapGesture {
@@ -66,9 +64,7 @@ struct TodoEditButton: View {
     let blue800 = Color.getRawColor(hex: "0031D8")
     var body: some View {
         Image(systemName: "pencil")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 32, height: 32)
+            .font(.title3)
             .foregroundColor(blue800)
             .contentShape(Rectangle())
             .onTapGesture {
@@ -83,9 +79,7 @@ struct TodoRestoreButton: View {
 
     var body: some View {
         Image(systemName: "arrow.triangle.2.circlepath")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 32, height: 32)
+            .font(.title3)
             .foregroundColor(blue800)
             .contentShape(Rectangle())
             .onTapGesture {
@@ -173,39 +167,31 @@ struct TodoListView: View {
                         ForEach(viewModel.todoList, id: \.uuid) { item in
                             ZStack(alignment: .trailing) {
                                 HStack(spacing: 8) {
-                                    TodoFavoriteButton(onStar: {
-                                        let realm = try! Realm()
-                                        if let todo = realm.object(ofType: Todo.self, forPrimaryKey: item.uuid) {
-                                            try! realm.write {
-                                                todo.isFavorite = !item.isFavorite
-                                            }
-                                        }
-                                    }, isFavorite: item.isFavorite)
                                     TodoEditButton(onEdit: {
                                         editedText = item.todo
                                         showAlert = true
                                     })
-                                    .sheet(isPresented: $showAlert) {
-                                        VStack(spacing: 20) {
-                                            Text("タスクを更新する")
-                                            TextField("", text: $editedText)
-                                                .textFieldStyle(.roundedBorder)
-                                                .padding()
-                                            HStack {
-                                                Button("キャンセル") { showAlert = false }
-                                                Button("更新") {
-                                                    let realm = try! Realm()
-                                                    if let todo = realm.object(ofType: Todo.self, forPrimaryKey: item.uuid) {
-                                                        try! realm.write {
-                                                            todo.todo = editedText
-                                                        }
-                                                    }
-                                                    showAlert = false
-                                                }
-                                            }
-                                        }
-                                        .padding()
-                                    }
+//                                    .sheet(isPresented: $showAlert) {
+//                                        VStack(spacing: 20) {
+//                                            Text("タスクを更新する")
+//                                            TextField("", text: $editedText)
+//                                                .textFieldStyle(.roundedBorder)
+//                                                .padding()
+//                                            HStack {
+//                                                Button("キャンセル") { showAlert = false }
+//                                                Button("更新") {
+//                                                    let realm = try! Realm()
+//                                                    if let todo = realm.object(ofType: Todo.self, forPrimaryKey: item.uuid) {
+//                                                        try! realm.write {
+//                                                            todo.todo = editedText
+//                                                        }
+//                                                    }
+//                                                    showAlert = false
+//                                                }
+//                                            }
+//                                        }
+//                                        .padding()
+//                                    }
                                     Spacer()
                                     if activeSectionTitle == .CURRENTLY_DETLETED {
                                         TodoRestoreButton(onRestore: {
@@ -230,6 +216,7 @@ struct TodoListView: View {
 
                                 CheckBoxButtonCards(
                                     isChecked: item.isComplete,
+                                    isFavorite: item.isFavorite,
                                     buttonText: item.todo,
                                     onVoid: {
                                         let realm = try! Realm()
@@ -238,6 +225,14 @@ struct TodoListView: View {
                                                 let current = todo.isComplete
                                                 todo.isComplete = !current
                                                 todo.completedAt = Date()
+                                            }
+                                        }
+                                    },
+                                    onFavoriteVoid: {
+                                        let realm = try! Realm()
+                                        if let todo = realm.object(ofType: Todo.self, forPrimaryKey: item.uuid) {
+                                            try! realm.write {
+                                                todo.isFavorite = !item.isFavorite
                                             }
                                         }
                                     }
