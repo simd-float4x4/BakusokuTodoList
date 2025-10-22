@@ -17,6 +17,8 @@ struct TodoListView: View {
     @State var isDeleteBegun = false
     @State var showAlert = false
     @State var editedText = ""
+    @State private var isPressed = false
+    @State private var pressedID: String? = nil
     let blue800 = Color.getRawColor(hex: "0031D8")
         
     var body: some View {
@@ -31,6 +33,13 @@ struct TodoListView: View {
             }
         }
     }
+    
+    func hapticAndSound() {
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.impactOccurred()
+        // AudioServicesPlaySystemSound(1520)
+    }
+
     
     var contentView: some View {
         NavigationStack {
@@ -66,6 +75,7 @@ struct TodoListView: View {
                     ScrollView {
                         LazyVStack(spacing: 8) {
                             ForEach(viewModel.todoList, id: \.uuid) { item in
+                                let isPressed = (pressedID == item.uuid)
                                 ZStack(alignment: .trailing) {
                                     HStack(spacing: 8) {
                                         TodoEditButton(onEdit: {
@@ -96,6 +106,14 @@ struct TodoListView: View {
                                             viewModel.updateContent(uuid: item.uuid, section: .isFavorite, newValueBool: !item.isFavorite)
                                         }
                                     )
+                                    .scaleEffect(isPressed ? 1.1 : 1.0)
+                                    .animation(.spring(response: 0.2, dampingFraction: 0.5), value: isPressed)
+                                    .onLongPressGesture(minimumDuration: 0, pressing: { pressing in
+                                        withAnimation {
+                                            pressedID = pressing ? item.uuid : nil
+                                            if pressing { hapticAndSound() }
+                                        }
+                                    }, perform: {})
                                 }
                             }
                             .alert("", isPresented: $showAlert) {
