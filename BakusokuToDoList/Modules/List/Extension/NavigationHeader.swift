@@ -31,6 +31,7 @@ extension TodoListView {
                     .onTapGesture {
                         activeSectionTitle = title
                         viewModel.mode = title
+                        viewModel.fetchTodos(current: title)
                     }
                 }
             }

@@ -52,10 +52,9 @@ struct TodoListView: View {
                             isShowAlert = false
                             isDeleteBegun = true
                             Task {
-                                viewModel.deleteAllTodo()
+                                viewModel.updateContent(section: .deleteAll)
                             }
                             isDeleteBegun = false
-                            viewModel.reloadData()
                         }
                     } message: {
                         Text("この操作は元に戻せません。")
@@ -77,21 +76,11 @@ struct TodoListView: View {
                                         Spacer()
                                         if activeSectionTitle == .CURRENTLY_DETLETED {
                                             TodoRestoreButton(onRestore: {
-                                                let realm = try! Realm()
-                                                if let todo = realm.object(ofType: Todo.self, forPrimaryKey: item.uuid) {
-                                                    try! realm.write {
-                                                        todo.isDelete = false
-                                                    }
-                                                }
+                                                viewModel.updateContent(uuid: item.uuid, section: .restore)
                                             })
                                         } else {
                                             TodoDeleteButton(onDelete: {
-                                                let realm = try! Realm()
-                                                if let todo = realm.object(ofType: Todo.self, forPrimaryKey: item.uuid) {
-                                                    try! realm.write {
-                                                        todo.isDelete = true
-                                                    }
-                                                }
+                                                viewModel.updateContent(uuid: item.uuid, section: .isDelete)
                                             })
                                         }
                                     }
@@ -101,22 +90,10 @@ struct TodoListView: View {
                                         isFavorite: item.isFavorite,
                                         buttonText: item.todo,
                                         onVoid: {
-                                            let realm = try! Realm()
-                                            if let todo = realm.object(ofType: Todo.self, forPrimaryKey: item.uuid) {
-                                                try! realm.write {
-                                                    let current = todo.isComplete
-                                                    todo.isComplete = !current
-                                                    todo.completedAt = Date()
-                                                }
-                                            }
+                                            viewModel.updateContent(uuid: item.uuid, section: .isComplete, newValueBool: !item.isComplete)
                                         },
                                         onFavoriteVoid: {
-                                            let realm = try! Realm()
-                                            if let todo = realm.object(ofType: Todo.self, forPrimaryKey: item.uuid) {
-                                                try! realm.write {
-                                                    todo.isFavorite = !item.isFavorite
-                                                }
-                                            }
+                                            viewModel.updateContent(uuid: item.uuid, section: .isFavorite, newValueBool: !item.isFavorite)
                                         }
                                     )
                                 }
@@ -124,12 +101,8 @@ struct TodoListView: View {
                             .alert("", isPresented: $showAlert) {
                                 TextField("更新されたToDoを入力", text: $editedText)
                                 Button("更新") {
-                                    Task {
-                                        viewModel.updateTodoContent(uuid: selectedUUID, updatedText: editedText)
-                                        viewModel.reloadData()
-                                    }
+                                    viewModel.updateContent(uuid: selectedUUID, section: .title, newValueString: editedText)
                                     showAlert = false
-                                    viewModel.fetchTodos(current: activeSectionTitle)
                                 }
                                 Button("キャンセル", role: .cancel) {
                                     showAlert = false
