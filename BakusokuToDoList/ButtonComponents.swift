@@ -112,6 +112,9 @@ struct CheckBoxButtonCards: View {
             dragOffset = 0
         }
         .offset(x: dragOffset)
+        .onDisappear() {
+            dragOffset = 0
+        }
         .gesture(
             DragGesture(minimumDistance: abs(swipeThreshold), coordinateSpace: .local)
                 .onChanged { value in
