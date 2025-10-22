@@ -21,8 +21,8 @@ class Todo: Object {
         self.init()
         self.uuid = UUID().uuidString
         self.todo = todo
-        self.isComplete = false
         self.createdAt = Date()
+        self.isComplete = false
         self.isDelete = false
         self.isFavorite = false
     }
