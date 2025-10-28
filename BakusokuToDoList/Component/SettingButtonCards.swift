@@ -9,9 +9,8 @@ import SwiftUI
 
 struct SettingButtonCards: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
-    @State var isEnabledShaking: Bool = false
+    @AppStorage("isShakingEnabled") private var isShakingEnabled: Bool = true
     let buttonText: String
-  
     let blue50 = Color.getRawColor(hex: "E8F1FE")
     let blue200 = Color.getRawColor(hex: "C5D7FB")
     let blue1000 = Color.getRawColor(hex: "00118F")
@@ -29,10 +28,13 @@ struct SettingButtonCards: View {
             
             Spacer()
             
-            Toggle(isOn: $isEnabledShaking, label: {
+            Toggle(isOn: $isShakingEnabled, label: {
                 
             })
             .foregroundColor(colorScheme == .light ? blue800 : blue200)
+            .onTapGesture {
+                SettingSharedManager.shared.changeIsShakingEnabledStatus(newValue: isShakingEnabled)
+            }
         }
         .padding()
         .frame(maxWidth: .infinity, minHeight: 48, alignment: .leading)

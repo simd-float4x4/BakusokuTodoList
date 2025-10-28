@@ -21,8 +21,10 @@ struct TodoListView: View {
     @State private var pressedID: String? = nil
     @State private var dragOffset: CGFloat = 0
     private let swipeThreshold: CGFloat = 100
+    @AppStorage("isShakingEnabled") private var isShakingEnabled: Bool = true
     
     let blue800 = Color.getRawColor(hex: "0031D8")
+    
         
     var body: some View {
         NavigationStack {
@@ -129,7 +131,10 @@ struct TodoListView: View {
                                 .onLongPressGesture(minimumDuration: 0, pressing: { pressing in
                                     withAnimation {
                                         pressedID = pressing ? item.uuid : nil
-                                        if pressing { hapticAndSound() }
+                                        let isShakingEnabled = SettingSharedManager.shared.getShakingEnabledStatus()
+                                        if isShakingEnabled && pressing {
+                                            hapticAndSound()
+                                        }
                                     }
                                 }, perform: {})
                             }
