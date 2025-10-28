@@ -23,17 +23,8 @@ struct BakusokuToDoListApp: SwiftUI.App {
     
     private func setupRealmMigration() {
         let config = Realm.Configuration(
-            schemaVersion: 2,
+            schemaVersion: 1,
             migrationBlock: { migration, oldSchemaVersion in
-                if oldSchemaVersion < 1 {
-                    migration.enumerateObjects(ofType: Todo.className()) { _, newObject in
-                        newObject!["isDelete"] = false
-                    }
-                } else if oldSchemaVersion < 2 {
-                    migration.enumerateObjects(ofType: Todo.className()) { _, newObject in
-                        newObject!["isFavorite"] = false
-                    }
-                }
             }
         )
         Realm.Configuration.defaultConfiguration = config

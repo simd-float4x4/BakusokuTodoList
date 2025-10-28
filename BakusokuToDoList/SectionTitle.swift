@@ -11,6 +11,7 @@ enum SectionTitle: CaseIterable {
     case NORMAL
     case CHECKED
     case CURRENTLY_DETLETED
+    case SETTING
     
     var titleText: String {
         switch self {
@@ -19,6 +20,7 @@ enum SectionTitle: CaseIterable {
         case .NORMAL: return "未達成"
         case .CHECKED: return "チェック済"
         case .CURRENTLY_DETLETED: return "最近削除した項目"
+        case .SETTING: return "設定"
         }
     }
 }

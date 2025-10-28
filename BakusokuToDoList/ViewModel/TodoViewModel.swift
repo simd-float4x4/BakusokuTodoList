@@ -45,6 +45,7 @@ class TodoViewModel: ObservableObject {
             results = results.where({ $0.isDelete == false && $0.isComplete == false && $0.isFavorite == false })
         case .STAR:
             results = results.where({ $0.isDelete == false && $0.isFavorite == true })
+        default: break
         }
         
         notificationToken = results.observe { [weak self] changes in
