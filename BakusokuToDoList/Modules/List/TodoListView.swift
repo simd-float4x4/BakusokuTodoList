@@ -18,6 +18,7 @@ struct TodoListView: View {
     @State var showAlert = false
     @State var editedText = ""
     @State private var isPressed = false
+    @State private var isLongPressed = false
     @State private var pressedID: String? = nil
     @State private var dragOffset: CGFloat = 0
     private let swipeThreshold: CGFloat = 100
@@ -117,6 +118,7 @@ struct TodoListView: View {
 
                                 CheckBoxButtonCards(
                                     isChecked: item.isComplete,
+                                    isLongTapped: $isLongPressed,
                                     isFavorite: item.isFavorite,
                                     buttonText: item.todo,
                                     onVoid: {
@@ -128,8 +130,9 @@ struct TodoListView: View {
                                 )
                                 .scaleEffect(isPressed ? 1.1 : 1.0)
                                 .animation(.spring(response: 0.2, dampingFraction: 0.5), value: isPressed)
-                                .onLongPressGesture(minimumDuration: 0, pressing: { pressing in
+                                .onLongPressGesture(minimumDuration: 1.5, pressing: { pressing in
                                     withAnimation {
+                                        isLongPressed = pressing
                                         pressedID = pressing ? item.uuid : nil
                                         let isShakingEnabled = SettingSharedManager.shared.getShakingEnabledStatus()
                                         if isShakingEnabled && pressing {

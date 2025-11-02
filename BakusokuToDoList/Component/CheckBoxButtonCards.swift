@@ -10,6 +10,7 @@ import SwiftUI
 struct CheckBoxButtonCards: View {
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     @State var isChecked: Bool = false
+    @Binding var isLongTapped: Bool
     var isFavorite: Bool = false
     let buttonText: String
     
@@ -57,6 +58,10 @@ struct CheckBoxButtonCards: View {
                 .stroke(Color.gray, lineWidth: 3)
         )
         .clipShape(RoundedRectangle(cornerRadius: 8))
+        .offset(x: dragOffset)
+        .onDisappear() {
+            dragOffset = 0
+        }
         .onTapGesture {
             if dragOffset == 0 {
                 isChecked.toggle()
@@ -64,29 +69,27 @@ struct CheckBoxButtonCards: View {
             }
             dragOffset = 0
         }
-        .offset(x: dragOffset)
-        .onDisappear() {
-            dragOffset = 0
-        }
         .gesture(
             DragGesture(minimumDistance: abs(swipeThreshold), coordinateSpace: .local)
                 .onChanged { value in
-                    // 移動量が左にあると同時に-100でdragをストップ
-                    if value.translation.width < 0 && dragOffset > -maxSwipe {
-                        dragOffset = value.translation.width
-                    }
-                    // ちょっとスワイプで戻す
-                    if value.translation.width > 0 && dragOffset < 0 {
-                        dragOffset = 0
-                    }
-                    
-                    // 移動量が左にあると同時に100でdragをストップ
-                    if value.translation.width > 0 && dragOffset < maxSwipe {
-                        dragOffset = value.translation.width
-                    }
-                    // ちょっとスワイプで戻す
-                    if value.translation.width < 0 && dragOffset > 0 {
-                        dragOffset = 0
+                    if isLongTapped {
+                        // 移動量が左にあると同時に-100でdragをストップ
+                        if value.translation.width < 0 && dragOffset > -maxSwipe {
+                            dragOffset = value.translation.width
+                        }
+                        // ちょっとスワイプで戻す
+                        if value.translation.width > 0 && dragOffset < 0 {
+                            dragOffset = 0
+                        }
+                        
+                        // 移動量が左にあると同時に100でdragをストップ
+                        if value.translation.width > 0 && dragOffset < maxSwipe {
+                            dragOffset = value.translation.width
+                        }
+                        // ちょっとスワイプで戻す
+                        if value.translation.width < 0 && dragOffset > 0 {
+                            dragOffset = 0
+                        }
                     }
                 }
                 .onEnded { value in
