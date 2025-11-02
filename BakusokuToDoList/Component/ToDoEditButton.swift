@@ -14,6 +14,7 @@ struct TodoEditButton: View {
     
     let onEdit: () -> Void
     let blue800 = Color.getRawColor(hex: "0031D8")
+    let blue200 = Color.getRawColor(hex: "C5D7FB")
 
     var body: some View {
         Image(systemName: "pencil")
