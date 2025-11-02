@@ -10,12 +10,15 @@ import SwiftUI
 import RealmSwift
 
 struct TodoEditButton: View {
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
+    
     let onEdit: () -> Void
     let blue800 = Color.getRawColor(hex: "0031D8")
+
     var body: some View {
         Image(systemName: "pencil")
             .font(.title3)
-            .foregroundColor(blue800)
+            .foregroundColor(colorScheme == .light ? blue800 : blue200)
             .contentShape(Rectangle())
             .onTapGesture {
                 onEdit()
