@@ -159,23 +159,40 @@ struct TodoListView: View {
                     
                     Spacer()
                         .frame(maxWidth: .infinity)
-                        .frame(height: 60)
+                        .frame(height: 120)
                         .padding()
                 }
                 
-                NavigationLink(destination: CreateTodoView()) {
-                    ZStack {
-                        Circle()
-                            .fill(Color.white)
-                            .frame(width: 56, height: 56)
-                            .shadow(radius: 4)
+                VStack(spacing: 4) {
+                    Button {
+                        viewModel.toggleFilteredTodos()
+                    } label: {
+                        ZStack {
+                            Circle()
+                                .fill(blue800)
+                                .frame(width: 56, height: 56)
+                                .shadow(radius: 4)
 
-                        Image(systemName: "plus")
-                            .font(.title3)
-                            .foregroundColor(blue800)
+                            Image(systemName: "arrow.up.arrow.down")
+                                .font(.title3)
+                                .foregroundColor(Color.white)
+                        }
                     }
+                    
+                    NavigationLink(destination: CreateTodoView()) {
+                        ZStack {
+                            Circle()
+                                .fill(Color.white)
+                                .frame(width: 56, height: 56)
+                                .shadow(radius: 4)
+
+                            Image(systemName: "plus")
+                                .font(.title3)
+                                .foregroundColor(blue800)
+                        }
+                    }
+                    .padding()
                 }
-                .padding()
             }
         }
     }

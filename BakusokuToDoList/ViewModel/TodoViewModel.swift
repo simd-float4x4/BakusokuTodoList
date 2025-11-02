@@ -24,7 +24,8 @@ class TodoViewModel: ObservableObject {
     private var realm: Realm
     
     @Published var todoList: [Todo] = []
-    @Published var mode: SectionTitle = .ALL 
+    @Published var mode: SectionTitle = .ALL
+    @Published var isAscending = false
     
     init() {
         realm = try! Realm()
@@ -47,6 +48,23 @@ class TodoViewModel: ObservableObject {
             results = results.where({ $0.isDelete == false && $0.isFavorite == true })
         default: break
         }
+        
+        notificationToken = results.observe { [weak self] changes in
+            guard let self = self else { return }
+            switch changes {
+            case .initial(let results):
+                self.todoList = Array(results)
+            case .update(let results, _, _, _):
+                self.todoList = Array(results)
+            case .error(let error):
+                print("Error observing todos: \(error)")
+            }
+        }
+    }
+    
+    func toggleFilteredTodos() {
+        isAscending.toggle()
+        var results = realm.objects(Todo.self).sorted(byKeyPath: "createdAt", ascending: isAscending)
         
         notificationToken = results.observe { [weak self] changes in
             guard let self = self else { return }
