@@ -165,7 +165,7 @@ struct TodoListView: View {
                 
                 VStack(spacing: 4) {
                     Button {
-                        viewModel.toggleFilteredTodos()
+                        viewModel.toggleFilteredTodos(activeSectionTitle: activeSectionTitle)
                     } label: {
                         ZStack {
                             Circle()

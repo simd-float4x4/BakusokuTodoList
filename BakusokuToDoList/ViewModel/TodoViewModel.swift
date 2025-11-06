@@ -62,10 +62,24 @@ class TodoViewModel: ObservableObject {
         }
     }
     
-    func toggleFilteredTodos() {
+    func toggleFilteredTodos(activeSectionTitle: SectionTitle) {
         isAscending.toggle()
         var results = realm.objects(Todo.self).sorted(byKeyPath: "createdAt", ascending: isAscending)
         
+        switch activeSectionTitle {
+        case .ALL:
+            results = results.where({ $0.isDelete == false })
+        case .CHECKED:
+            results = results.where({ $0.isDelete == false && $0.isComplete == true }).sorted(byKeyPath: "completedAt", ascending: false)
+        case .CURRENTLY_DETLETED:
+            results = results.where({ $0.isDelete == true })
+        case .NORMAL:
+            results = results.where({ $0.isDelete == false && $0.isComplete == false && $0.isFavorite == false })
+        case .STAR:
+            results = results.where({ $0.isDelete == false && $0.isFavorite == true })
+        default: break
+        }
+
         notificationToken = results.observe { [weak self] changes in
             guard let self = self else { return }
             switch changes {
