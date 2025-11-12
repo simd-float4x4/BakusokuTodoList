@@ -25,7 +25,7 @@ class TodoViewModel: ObservableObject {
     
     @Published var todoList: [Todo] = []
     @Published var mode: SectionTitle = .ALL
-    @Published var isAscending = false
+    @Published var isAscending = true
     
     init() {
         realm = try! Realm()
@@ -33,7 +33,10 @@ class TodoViewModel: ObservableObject {
     }
 
     func fetchTodos(current: SectionTitle) {
-        var results = realm.objects(Todo.self)
+        if let current = UserDefaults.standard.value(forKey: "filterKeyIsAscending") as? Bool {
+            isAscending = current
+        }
+        var results = realm.objects(Todo.self).sorted(byKeyPath: "createdAt", ascending: isAscending)
         
         switch current {
         case .ALL:
@@ -91,6 +94,8 @@ class TodoViewModel: ObservableObject {
                 print("Error observing todos: \(error)")
             }
         }
+        
+        UserDefaults.standard.set(isAscending, forKey: "filterKeyIsAscending")
     }
     
     func updateContent(uuid: String? = nil, section: UpdateValue, newValueBool: Bool? = nil, newValueDate: Date? = nil, newValueString: String? = nil) {

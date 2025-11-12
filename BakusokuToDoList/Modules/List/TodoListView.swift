@@ -26,7 +26,6 @@ struct TodoListView: View {
     
     let blue800 = Color.getRawColor(hex: "0031D8")
     
-        
     var body: some View {
         NavigationStack {
             ZStack {
