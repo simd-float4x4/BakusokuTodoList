@@ -24,7 +24,12 @@ struct TodoListView: View {
     private let swipeThreshold: CGFloat = 100
     @AppStorage("isShakingEnabled") private var isShakingEnabled: Bool = true
     
+    let blue50 = Color.getRawColor(hex: "E8F1FE")
+    let blue200 = Color.getRawColor(hex: "C5D7FB")
+    let blue1000 = Color.getRawColor(hex: "00118F")
     let blue800 = Color.getRawColor(hex: "0031D8")
+    let blue100 = Color.getRawColor(hex: "D9E6FF")
+    let gray800 = Color.getRawColor(hex: "333333")
     
     var body: some View {
         NavigationStack {
@@ -89,6 +94,7 @@ struct TodoListView: View {
                     Text("この操作は元に戻せません。")
                 }
                 .padding()
+                .padding(.top, 16)
             }
             
             ZStack(alignment: .bottomTrailing) {

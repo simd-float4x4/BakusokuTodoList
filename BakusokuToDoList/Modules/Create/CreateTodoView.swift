@@ -29,17 +29,17 @@ struct CreateTodoView: View {
                 
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("ここにやることを登録してください。")
-                    Text("改行をして入力することで、一度にまとめてTodoカードを作成できます。")
-                    Text("※行頭記号は不要です。")
+                    Text("ここにやることを登録してください。", comment: "Placeholder text for todo input")
+                    Text("改行をして入力することで、一度にまとめてTodoカードを作成できます。", comment: "Instruction about multi-line input")
+                    Text("※行頭記号は不要です。", comment: "Note about no need for bullet points")
                     Spacer()
                         .frame(height: 20)
-                    Text("例）")
-                    Text("TOEICの問題集P358~388を進める")
-                    Text("火曜日に鶏肉と牛乳を買う")
-                    Text("銀行の振り込みに行く")
-                    Text("抽選登録の申し込みを忘れない")
-                    Text("クライアントへ見積もりを送付する")
+                    Text("例）", comment: "Example label")
+                    Text("TOEICの問題集P358~388を進める", comment: "Example todo item 1")
+                    Text("火曜日に鶏肉と牛乳を買う", comment: "Example todo item 2")
+                    Text("銀行の振り込みに行く", comment: "Example todo item 3")
+                    Text("抽選登録の申し込みを忘れない", comment: "Example todo item 4")
+                    Text("クライアントへ見積もりを送付する", comment: "Example todo item 5")
                     Spacer()
                 }
                 .opacity(text.isEmpty ? 0.5 : 0.0)
@@ -48,7 +48,7 @@ struct CreateTodoView: View {
             }
            
             
-            ButtonComponents(buttonText: "登録する") {
+            ButtonComponents(buttonText: String(localized: "登録する", comment: "Register button text")) {
                 var array = Array(text.components(separatedBy: "\n"))
                 array.removeAll(where: { (value) in
                     value == ""
