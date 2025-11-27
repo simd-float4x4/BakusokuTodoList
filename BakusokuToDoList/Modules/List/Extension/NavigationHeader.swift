@@ -18,10 +18,10 @@ extension TodoListView {
                         .padding(.vertical, 8)
                         .padding(.horizontal, 16)
                         .foregroundStyle(
-                            activeSectionTitle == title ? .white : .black
+                            activeSectionTitle == title ? .white : colorScheme != .light ? .white : .black
                         )
                         .background(
-                            activeSectionTitle == title ? blue800 : blue200
+                            activeSectionTitle == title ? blue800 : colorScheme == .light ? .white : .black
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: 4)

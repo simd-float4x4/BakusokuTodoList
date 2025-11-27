@@ -16,15 +16,7 @@
       }
     },
     "TOEICの問題集P358~388を進める" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Work on TOEIC workbook pages 358-388"
-          }
-        }
-      }
+      "comment" : "Example todo item 1"
     },
     "キャンセル" : {
       "comment" : "Two buttons for confirming or cancelling the deletion.",
@@ -165,6 +157,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Register"
+          }
+        }
+      }
+    },
+    "英語の問題集P358~388を進める" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Work on Japanese workbook pages 358-388"
           }
         }
       }

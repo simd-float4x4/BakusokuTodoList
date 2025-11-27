@@ -425,7 +425,7 @@
 				DEVELOPMENT_TEAM = 27UFW2M9H8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Hasty! -爆速で作るTodoList-";
+				INFOPLIST_KEY_CFBundleDisplayName = "Hasty! – シンプルで最速のTodoリスト";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -459,7 +459,7 @@
 				DEVELOPMENT_TEAM = 27UFW2M9H8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Hasty! -爆速で作るTodoList-";
+				INFOPLIST_KEY_CFBundleDisplayName = "Hasty! – シンプルで最速のTodoリスト";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

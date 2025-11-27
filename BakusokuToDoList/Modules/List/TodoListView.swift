@@ -11,6 +11,7 @@ import RealmSwift
 
 struct TodoListView: View {
     @StateObject var viewModel = TodoViewModel()
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     @State var activeSectionTitle: SectionTitle = .ALL
     @State var selectedUUID: String = ""
     @State var isShowAlert = false
